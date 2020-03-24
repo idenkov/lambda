@@ -10,13 +10,18 @@ curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | 
 sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 sudo yum -y install jenkins
 sudo yum -y install git
+sudo yum -y install docker
+
+echo "Fix docker permissions for Jenkins"
+usermod -aG docker jenkins
+usermod -aG root jenkins
+chmod 664 /var/run/docker.sock
 
 echo "Enable Jenkins service"
 sudo systemctl start jenkins
 sudo systemctl enable jenkins
 
 echo "Install Docker engine"
-yum install docker -y
-sudo usermod -a -G docker jenkins
 sudo service docker start
 sudo chkconfig docker on
+
